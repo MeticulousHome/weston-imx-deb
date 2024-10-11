@@ -4241,7 +4241,6 @@ weston_view_set_initial_position(struct weston_view *view,
 	int32_t x, y;
 	struct weston_output *output, *target_output = NULL;
 	struct weston_seat *seat;
-	pixman_rectangle32_t area;
 
 	/* As a heuristic place the new window on the same output as the
 	 * pointer. Falling back to the output containing 0, 0.
@@ -4265,30 +4264,7 @@ weston_view_set_initial_position(struct weston_view *view,
 		}
 	}
 
-	if (!target_output) {
-		weston_view_set_position(view, 10 + random() % 400,
-					 10 + random() % 400);
-		return;
-	}
-
-	/* Valid range within output where the surface will still be onscreen.
-	 * If this is negative it means that the surface is bigger than
-	 * output.
-	 */
-	get_output_work_area(shell, target_output, &area);
-
-	x = area.x;
-	y = area.y;
-	range_x = area.width - view->surface->width;
-	range_y = area.height - view->surface->height;
-
-	if (range_x > 0)
-		x += random() % range_x;
-
-	if (range_y > 0)
-		y += random() % range_y;
-
-	weston_view_set_position(view, x, y);
+	weston_view_set_position(view, 0, 0);
 }
 
 static bool
